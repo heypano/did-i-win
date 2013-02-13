@@ -1,6 +1,7 @@
 
 <?php 
 include_once 'dbconnect.php';
+include_once 'get.php';
 $mysqli = $_SESSION["connection"];
 ?>
 <!doctype html>
@@ -23,11 +24,12 @@ $mysqli = $_SESSION["connection"];
     -moz-border-radius: 5px;
     border-radius: 5px;
     line-height:30px;
+    padding:2px;
   }
   </style>
   <script>
   $(document).ready(function(){
-    if($("#name").length>0){
+    if($("#name").length>0){ //This means the person won
       $("#name").change(function(){
         var name = $("#name").val();
         $.ajax({
@@ -35,17 +37,22 @@ $mysqli = $_SESSION["connection"];
             data: {name: name},
             type: "post",
             success: function() {
-              console.log("hi");
+              console.log("saved");
+              $('#theinput').remove();
             }
         });
-      });
-      $.get('get.php', function(data) {
-        console.log(data);
-        $('#winners').html(data);
+        printWinners();
       });
     }
     });
-    
+	printWinners();
+  function printWinners(){
+      $.get('winners.php', function(data) {
+      	winners = JSON.parse(data);
+      	console.log(winners);
+        $('#winners').html(data);
+      });
+  }
   </script>
   <!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -59,11 +66,12 @@ $mysqli = $_SESSION["connection"];
   //Win condition!
   if ($lastdigit==1){
     //Check to see if IP already in database
-    echo "<div id=\"theinput\">Congratulations, you have won!<br> If you'd like to brag about it, enter your name here and press enter: <br />";
-    echo '<input type="text" id="name" /></div>';
-    echo '
+  	if(alreadyWon()){
+	    echo "<div id=\"theinput\">Congratulations, you have won!<br> If you'd like to brag about it, enter your name here and press enter: <br />";
+	    echo '<input type="text" id="name" /></div>';
+  	}
 
-    ';
+    
   }
   ?>
 <div id="winners"></div>

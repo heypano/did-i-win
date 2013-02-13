@@ -46,13 +46,16 @@ $mysqli = $_SESSION["connection"];
             success: function() {
               console.log("saved");
               $('#theinput').remove();
-	          printWinners();
             }
         });
       });
     }
     });
-	printWinners();
+    
+  setInterval(printWinners,3000);
+	
+	
+	
   function printWinners(){
       $.get('winners.php', function(data) {
       	winners = JSON.parse(data);

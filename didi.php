@@ -39,9 +39,9 @@ $mysqli = $_SESSION["connection"];
             success: function() {
               console.log("saved");
               $('#theinput').remove();
+	          printWinners();
             }
         });
-        printWinners();
       });
     }
     });
@@ -49,8 +49,17 @@ $mysqli = $_SESSION["connection"];
   function printWinners(){
       $.get('winners.php', function(data) {
       	winners = JSON.parse(data);
-      	console.log(winners);
-        $('#winners').html(data);
+      	$('#winners').html("");
+      	$(winners).each(
+      		function(index,item){
+      			$('#winners').append('<div class="winner">'+
+      			"<strong>"+item.name+"</strong>"+
+      			" - "+item.date+
+      			'</div>')
+      		}
+      	);
+      	
+        //$('#winners').html(data);
       });
   }
   </script>
@@ -64,16 +73,20 @@ $mysqli = $_SESSION["connection"];
   //Last digit of IP
   $lastdigit = substr($ip,-1);
   //Win condition!
-  if ($lastdigit==1){
+  if ($lastdigit%3==1){
     //Check to see if IP already in database
-  	if(alreadyWon()){
+  	if(!alreadyWon()){
 	    echo "<div id=\"theinput\">Congratulations, you have won!<br> If you'd like to brag about it, enter your name here and press enter: <br />";
 	    echo '<input type="text" id="name" /></div>';
   	}
+	else{
+		echo "Don't try to cheat, I know you've already won.";
+	}
 
     
   }
   ?>
+<h3>The Winners</h3>
 <div id="winners"></div>
 </body>
 </html>

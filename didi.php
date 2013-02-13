@@ -51,7 +51,7 @@ $mysqli = $_SESSION["connection"];
       });
     }
     });
-    
+  printWinners(); // For when they log in
   setInterval(printWinners,3000);
 	
 	

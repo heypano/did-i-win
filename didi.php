@@ -58,7 +58,9 @@ $mysqli = $_SESSION["connection"];
       			'</div>')
       		}
       	);
-      	
+      	if($('#winners').html()==""){
+      		$('#winners').html("Noone has won yet!");
+      	}
         //$('#winners').html(data);
       });
   }
@@ -70,10 +72,11 @@ $mysqli = $_SESSION["connection"];
 <body>
   <?php
   $ip = $_SERVER['REMOTE_ADDR'];
+  echo '<script>console.log("'.$ip.'")</script>';
   //Last digit of IP
   $lastdigit = substr($ip,-1);
   //Win condition!
-  if ($lastdigit%3==1){
+  if ($lastdigit%3==0){
     //Check to see if IP already in database
   	if(!alreadyWon()){
 	    echo "<div id=\"theinput\">Congratulations, you have won!<br> If you'd like to brag about it, enter your name here and press enter: <br />";
@@ -84,6 +87,9 @@ $mysqli = $_SESSION["connection"];
 	}
 
     
+  }//If they didn't win
+  else{
+  	echo "I'm sorry! You lost. Try going somewhere else.";
   }
   ?>
 <h3>The Winners</h3>

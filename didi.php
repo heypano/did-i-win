@@ -59,6 +59,12 @@ $mysqli = $_SESSION["connection"];
   function printWinners(){
       $.get('winners.php', function(data) {
       	winners = JSON.parse(data);
+      	/*console.log($(winners).sort(function(a,b){
+		    return new Date(a.date) > new Date(b.date);
+		}));*/
+		winners = $(winners).sort(function(a,b){
+		    return new Date(a.date) > new Date(b.date);
+		})
       	$('#winners').html("");
       	$(winners).each(
       		function(index,item){
